@@ -31,7 +31,7 @@ export default function Header() {
 					<HStack>
 						<RiMovie2Line size={'2rem'} />
 						<Heading as={'h1'} size={'lg'}>
-							Moble Comics
+							Marvel Comics
 						</Heading>
 					</HStack>
 				</Link>
