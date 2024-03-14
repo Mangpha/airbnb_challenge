@@ -21,15 +21,6 @@ import { ComicModal } from './ComicModal';
 export default function ComicList({ results: comics }: ComicsData) {
 	const { isOpen, onClose, onOpen } = useDisclosure();
 	const [selectedComic, setSelectedComic] = useState<ComicsResult | null>(null);
-	const [visibleComics, setVisibleComics] = useState<ComicsResult[]>([]);
-	const [pageNumber, setPageNumber] = useState(1);
-	const [isLoading, setIsLoading] = useState(false);
-	const itemsPerPage = 10;
-
-	useEffect(() => {
-		setVisibleComics(comics.slice(0, itemsPerPage));
-		setPageNumber(2);
-	}, [comics]);
 
 	const handleComicClick = (comic: ComicsResult) => {
 		setSelectedComic(comic);
@@ -41,34 +32,6 @@ export default function ComicList({ results: comics }: ComicsData) {
 		onClose();
 	};
 
-	const loadMoreComics = () => {
-		setIsLoading(true);
-		setTimeout(() => {
-			const startIndex = (pageNumber - 1) * itemsPerPage;
-			const endIndex = startIndex + itemsPerPage;
-			setVisibleComics((prevVisibleComics) => [
-				...prevVisibleComics,
-				...comics.slice(startIndex, endIndex),
-			]);
-			setPageNumber((prevPageNumber) => prevPageNumber + 1);
-			setIsLoading(false);
-		}, 500);
-	};
-
-	const handleScroll = () => {
-		const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-		if (scrollHeight - scrollTop === clientHeight && !isLoading) {
-			loadMoreComics();
-		}
-	};
-
-	useEffect(() => {
-		window.addEventListener('scroll', handleScroll);
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		};
-	}, []);
-
 	const backgroundColor = useColorModeValue('gray.100', 'rgb(50, 50, 50)');
 	const boxShadowColor = useColorModeValue(
 		'rgba(0,0,0,0.2)',
@@ -78,7 +41,7 @@ export default function ComicList({ results: comics }: ComicsData) {
 	return (
 		<Flex justifyContent={'center'}>
 			<Grid px={20} templateColumns={'repeat(4, minmax(150px, 1fr))'} gap={5}>
-				{visibleComics.map((comic) => (
+				{comics.map((comic) => (
 					<Box
 						key={comic.id}
 						onClick={() => handleComicClick(comic)}
@@ -105,13 +68,10 @@ export default function ComicList({ results: comics }: ComicsData) {
 						<Text mt={2}>{comic.title}</Text>
 					</Box>
 				))}
-				{isLoading && <Text>Loading...</Text>}
 				<ComicModal
 					isOpen={isOpen}
 					closeComicModal={closeComicModal}
-					title={selectedComic?.title}
-					description={selectedComic?.description}
-					thumbnailUrl={`${selectedComic?.thumbnail.path}.${selectedComic?.thumbnail.extension}`}
+					comic={selectedComic}
 				/>
 			</Grid>
 		</Flex>

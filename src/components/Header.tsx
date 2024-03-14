@@ -36,19 +36,12 @@ export default function Header() {
 					</HStack>
 				</Link>
 				<Flex alignItems={'center'}>
-					<InputGroup mr={6}>
-						<InputLeftElement
-							pointerEvents={'none'}
-							children={<SearchIcon />}
-						/>
-						<Input type={'text'} placeholder={'Search movies'} />
-					</InputGroup>
 					<HStack mx={10}>
 						<Box mr={5}>
-							<Link to={'/'}>Home</Link>
+							<Link to={'/'}>Comics</Link>
 						</Box>
 						<Box>
-							<Link to={'/about'}>About</Link>
+							<Link to={'/characters'}>Characters</Link>
 						</Box>
 					</HStack>
 					<IconButton

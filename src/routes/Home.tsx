@@ -3,12 +3,13 @@ import ComicList from '../components/ComicList';
 import { listComics } from '../api';
 import { ComicsResponse } from '../types';
 import { Box, Text } from '@chakra-ui/react';
+import { COMICS } from '../constants';
 
 export default function Home() {
 	const { data: comicsData, isLoading: comicsDataLoading } =
 		useQuery<ComicsResponse>({
 			queryFn: listComics,
-			queryKey: ['comics'],
+			queryKey: [COMICS],
 		});
 
 	return (
