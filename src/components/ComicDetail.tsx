@@ -26,7 +26,6 @@ export const ComicDetail = () => {
 	useEffect(() => {
 		if (data) if (data.code !== 200) navigate('/404');
 	});
-	console.log(data);
 
 	return (
 		<Flex px={40} my={5} minW={'100vw'}>
