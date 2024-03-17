@@ -1,24 +1,30 @@
-import { Box, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { listCharacters } from '../api';
 import { CHARACTERS } from '../constants';
 import { CharactersResponse } from '../types';
+import CharacterList from '../components/CharacterList';
 
 export const Characters = () => {
-	const { data, isLoading } = useQuery<CharactersResponse>({
-		queryFn: listCharacters,
-		queryKey: [CHARACTERS],
-	});
-
-	console.log(data);
+	const { data: characterData, isLoading: characterDataLoading } =
+		useQuery<CharactersResponse>({
+			queryFn: listCharacters,
+			queryKey: [CHARACTERS],
+		});
 
 	return (
-		<Grid px={40} py={30} templateColumns="repeat(5, 1fr)" gap={6}>
-			<GridItem w="100%" h="250" bg="blue.500" />
-			<GridItem w="100%" h="250" bg="blue.500" />
-			<GridItem w="100%" h="250" bg="blue.500" />
-			<GridItem w="100%" h="250" bg="blue.500" />
-			<GridItem w="100%" h="250" bg="blue.500" />
-		</Grid>
+		<Box>
+			{characterData?.code === 200 && !characterDataLoading ? (
+				<CharacterList
+					offset={characterData.data.offset}
+					limit={characterData.data.limit}
+					total={characterData.data.total}
+					count={characterData.data.count}
+					results={characterData.data.results}
+				/>
+			) : (
+				<Text>Loading</Text>
+			)}
+		</Box>
 	);
 };

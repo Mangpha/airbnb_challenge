@@ -10,8 +10,8 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { ComicDetailResponse } from '../types';
-import { comicDetail } from '../api';
+import { CharactersResponse, ComicDetailResponse } from '../types';
+import { comicDetail, listComicCharacters } from '../api';
 import { COMICS } from '../constants';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -21,6 +21,10 @@ export const ComicDetail = () => {
 	const { isLoading, data } = useQuery<ComicDetailResponse>({
 		queryFn: comicDetail,
 		queryKey: [COMICS, comicId],
+	});
+	const { data: comicCharacter } = useQuery<CharactersResponse>({
+		queryFn: listComicCharacters,
+		queryKey: [COMICS, comicId, 'characters'],
 	});
 	const navigate = useNavigate();
 	useEffect(() => {
@@ -44,10 +48,10 @@ export const ComicDetail = () => {
 						<Box mb={10}>
 							<Text fontSize={'2xl'}>Characters</Text>
 							<Text>
-								{data?.data.results[0].characters.available !== 0
-									? data?.data.results[0].characters.items.map(
-											(item, index) => <Text key={index}>{item.name}</Text>
-									  )
+								{comicCharacter?.data.results.length !== 0
+									? comicCharacter?.data.results.map((item, index) => (
+											<Text key={index}>{item.name}</Text>
+									  ))
 									: '-'}
 							</Text>
 						</Box>
